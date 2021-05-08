@@ -56,6 +56,7 @@ export default () => {
         <TextInput
           value={name}
           onChangeText={setName}
+          placeholderTextColor="white"
           style={{
             width: '90%',
             height: 50,
@@ -71,6 +72,7 @@ export default () => {
         <TextInput
           value={surname}
           onChangeText={setSurname}
+          placeholderTextColor="white"
           style={{
             width: '90%',
             height: 50,
@@ -86,6 +88,7 @@ export default () => {
         <TextInput
           value={email}
           onChangeText={setEmail}
+          placeholderTextColor="white"
           style={{
             width: '90%',
             height: 50,

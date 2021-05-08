@@ -15,6 +15,7 @@ import {getSdata, getStorage} from '../lib/storage';
 import Icon from 'react-native-vector-icons/Entypo';
 import Icon5 from 'react-native-vector-icons/FontAwesome5';
 import IconM from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaskedView from '@react-native-community/masked-view';
 export default () => {
   const history = useHistory();
   const [name, setName] = useState('');
@@ -40,7 +41,39 @@ export default () => {
               height: '85%',
               backgroundColor: 'white',
               borderRadius: 10,
-            }}></View>
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <MaskedView
+              style={{flex: 1, flexDirection: 'row', height: '100%'}}
+              maskElement={
+                <View
+                  style={{
+                    // Transparent background because mask is based off alpha channel.
+                    backgroundColor: 'transparent',
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: 60,
+                      color: 'black',
+                      fontWeight: 'bold',
+                    }}>
+                    sTodo
+                  </Text>
+                </View>
+              }>
+              {/* Shows behind the mask, you can put anything here, such as an image */}
+              <View
+                style={{flex: 1, height: '100%', backgroundColor: '#00adb5'}}
+              />
+              <View
+                style={{flex: 1, height: '100%', backgroundColor: '#393e46'}}
+              />
+            </MaskedView>
+          </View>
         </View>
       </View>
       <View
