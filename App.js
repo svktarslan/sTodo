@@ -27,11 +27,8 @@ export default () => {
   const [data, setData] = useState([]);
   useEffect(() => {
     (async () => {
-      setData(await getStorage('tasks'), {
-        title: '12345',
-        state: false,
-        tags: [],
-      });
+      const tasks = await getStorage('tasks');
+      if(tasks !== null) setData(tasks);
     })();
   }, []);
   const Background = () => {
