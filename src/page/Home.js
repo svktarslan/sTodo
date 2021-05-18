@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -9,6 +9,7 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
+import _ from 'lodash';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useHistory} from 'react-router';
 import {getSdata, getStorage} from '../lib/storage';
@@ -16,6 +17,8 @@ import Icon from 'react-native-vector-icons/Entypo';
 import Icon5 from 'react-native-vector-icons/FontAwesome5';
 import IconM from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaskedView from '@react-native-community/masked-view';
+import {Context} from '../lib/Context';
+
 export default () => {
   const history = useHistory();
   const [name, setName] = useState('');
@@ -24,6 +27,43 @@ export default () => {
       setName(await AsyncStorage.getItem('name'));
     })();
   }, []);
+  console.log(
+    new Date().getDate(),
+    '/',
+    new Date().getMonth(),
+    new Date().getFullYear(),
+  );
+  const data = [
+    {
+      title: 'All',
+      tag: 'a',
+      icon: 'clipboard-list-outline',
+    },
+    {
+      title: 'Music',
+      tag: 'b',
+      icon: 'clipboard-list-outline',
+    },
+    {
+      title: 'Tasks',
+      tag: 'a',
+      icon: 'clipboard-list-outline',
+    },
+    {
+      title: 'Film',
+      tag: 'b',
+      icon: 'clipboard-list-outline',
+    },
+  ];
+
+  const test = data.reduce((acc, product, y) => {
+    let key = product['tag'];
+    if (!acc[key]) {
+      acc[key] = [];
+    }
+    acc[key].push(product);
+    return acc;
+  }, {});
   return (
     <View style={{width: '85%', height: '80%', marginTop: 20}}>
       <View style={{flex: 1}}>
@@ -65,7 +105,6 @@ export default () => {
                   </Text>
                 </View>
               }>
-              {/* Shows behind the mask, you can put anything here, such as an image */}
               <View
                 style={{flex: 1, height: '100%', backgroundColor: '#00adb5'}}
               />

@@ -20,7 +20,6 @@ export default ({data, setData}) => {
   const [send, setSend] = useState(false);
   const [task, setTask] = useState('');
   const windowWidth = (Dimensions.get('window').width * 2) / 3.3;
-  const windowHeight = Dimensions.get('window').height;
   const mode = useRef(new Animated.Value(0)).current;
   const handlerPress = () => {
     Animated.sequence([
@@ -160,6 +159,7 @@ export default ({data, setData}) => {
                         : pathname === '/tasks/c'
                         ? ['a', 'c']
                         : ['a', 'd'],
+                    time: (new Date().getHours(), ':', new Date().getMinutes()),
                   },
                   ...data,
                 ]);
@@ -175,6 +175,7 @@ export default ({data, setData}) => {
                         : pathname === '/tasks/c'
                         ? ['a', 'c']
                         : ['a', 'd'],
+                    time: `${new Date().getDay()}/${new Date().getMonth()}/${new Date().getFullYear()}   ${new Date().getHours()}:${new Date().getMinutes()}`,
                   },
                   ...data,
                 ]);
