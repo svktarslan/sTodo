@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import {
   Animated,
   Dimensions,
@@ -8,7 +8,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  useColorScheme,
+  Keyboard,
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -19,7 +19,7 @@ export default ({data, setData}) => {
   const history = useHistory();
   const [send, setSend] = useState(false);
   const [task, setTask] = useState('');
-  const windowWidth = (Dimensions.get('window').width * 2) / 3.3;
+  const wid = Dimensions.get('window').width;
   const mode = useRef(new Animated.Value(0)).current;
   const handlerPress = () => {
     Animated.sequence([
@@ -30,51 +30,96 @@ export default ({data, setData}) => {
       }),
     ]).start();
   };
-  const w = mode.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, windowWidth],
-  });
   const h = mode.interpolate({
     inputRange: [0, 1],
     outputRange: [40, 0],
   });
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
+    Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
+    return () => {
+      Keyboard.removeListener('keyboardDidShow', _keyboardDidShow);
+      Keyboard.removeListener('keyboardDidHide', _keyboardDidHide);
+    };
+  }, []);
+  const [keyboardStatus, setKeyboardStatus] = useState(false);
+  const _keyboardDidShow = () => setKeyboardStatus(true);
+  const _keyboardDidHide = () => setKeyboardStatus(false);
 
+  const keyboard = useRef(new Animated.Value(0)).current;
+  const keyboardAnimation = () => {
+    Animated.sequence([
+      Animated.timing(keyboard, {
+        toValue: keyboardStatus ? 1 : 0,
+        duration: 250,
+        useNativeDriver: false,
+      }),
+    ]).start();
+  };
+  const k = mode.interpolate({
+    inputRange: [0, 1],
+    outputRange: [20, 0],
+  });
+  const kw = mode.interpolate({
+    inputRange: [0, 1],
+    outputRange: [(wid * 4) / 5, wid],
+  });
+  const kww = mode.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, (wid * 3) / 4],
+  });
+  const kl = mode.interpolate({
+    inputRange: [0, 1],
+    outputRange: [wid / 10, 0],
+  });
+  const kr = mode.interpolate({
+    inputRange: [0, 1],
+    outputRange: [30, 0],
+  });
+  useEffect(() => {
+    keyboardAnimation();
+  }, [keyboardStatus]);
+  const [focus, setFocus] = useState(false);
   return (
     <Animated.View
       style={{
         position: 'absolute',
-        bottom: 20,
-        left: '10%',
-        width: '80%',
+        bottom: k,
+        left: kl,
+        width: kw,
         height: 50,
-        borderRadius: 30,
-        backgroundColor: '#393e46',
+        borderRadius: kr,
+        backgroundColor: '#393e4699',
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
       }}>
-      <Animated.View
-        style={{
-          position: 'absolute',
-          top: '10%',
-          left: 5,
-          width: w,
-          height: '80%',
-          backgroundColor: 'white',
-          borderRadius: 30,
-          zIndex: 20,
-        }}>
-        <TextInput
-          value={task}
-          onChangeText={setTask}
+      {focus ? (
+        <Animated.View
           style={{
-            width: '100%',
-            height: '100%',
-            paddingHorizontal: 10,
-            color: 'black',
-          }}
-        />
-      </Animated.View>
+            position: 'absolute',
+            top: '10%',
+            left: 5,
+            width: kww,
+            height: '80%',
+            backgroundColor: 'white',
+            borderRadius: 30,
+            zIndex: 20,
+          }}>
+          <TextInput
+            value={task}
+            autoFocus={true}
+            onChangeText={setTask}
+            blurOnSubmit={false}
+            style={{
+              width: '100%',
+              height: '100%',
+              paddingHorizontal: 10,
+              color: 'black',
+            }}
+          />
+        </Animated.View>
+      ) : null}
       <Animated.View
         style={{
           position: 'absolute',
@@ -124,6 +169,7 @@ export default ({data, setData}) => {
             }}>
             <TouchableOpacity
               onPress={() => {
+                setFocus(!focus);
                 handlerPress();
                 setSend(false);
               }}
@@ -145,6 +191,7 @@ export default ({data, setData}) => {
             }}>
             <TouchableOpacity
               onPress={() => {
+                setFocus(!focus);
                 handlerPress();
                 setSend(false);
                 setStorage('tasks', [
@@ -202,6 +249,7 @@ export default ({data, setData}) => {
             onPress={() => {
               handlerPress();
               setSend(true);
+              setFocus(!focus);
             }}
             style={{width: '100%', height: '100%'}}>
             <Icon name="pluscircleo" size={35} color="white" />

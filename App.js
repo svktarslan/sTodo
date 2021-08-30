@@ -15,6 +15,7 @@ import Setting from './src/page/Setting';
 import Tasks from './src/page/Tasks';
 import {SwipeablePanel} from 'rn-swipeable-panel';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon5 from 'react-native-vector-icons/FontAwesome5';
 import {Context} from './src/lib/Context';
 import Test from './src/page/Test';
 
@@ -52,6 +53,7 @@ export default () => {
 
   const Background = () => {
     let {pathname} = useLocation();
+    console.log(pathname);
     return (
       <View
         style={{
@@ -153,18 +155,53 @@ export default () => {
             </View>
           </View>
         </SwipeablePanel>
-        <View
-          style={{
-            position: 'absolute',
-            bottom: -100,
-            left: -100,
-            backgroundColor: pathname !== '/setting' ? 'white' : '#222831',
-            width: 400,
-            height: 400,
-            borderRadius: 200,
-          }}></View>
+        {pathname === '/tasks/b' ? (
+          <Icon
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              right: 0,
+            }}
+            name="music"
+            size={350}
+            color="grey"
+          />
+        ) : pathname === '/tasks/c' ? (
+          <Icon5
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              right: 0,
+            }}
+            name="tasks"
+            size={300}
+            color="grey"
+          />
+        ) : pathname === '/tasks/d' ? (
+          <Icon5
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              right: 0,
+            }}
+            name="film"
+            size={300}
+            color="grey"
+          />
+        ) : (
+          <View
+            style={{
+              position: 'absolute',
+              bottom: -100,
+              left: -100,
+              backgroundColor: pathname !== '/setting' ? 'white' : '#222831',
+              width: 400,
+              height: 400,
+              borderRadius: 200,
+            }}></View>
+        )}
         <Route exact path="/home">
-          <Test />
+          <Home />
         </Route>
         <Route exact path="/setting">
           <Setting />
